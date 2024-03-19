@@ -5,7 +5,7 @@ Universal template compiler based on ruby dynamic evaluation feature.
 Minimalistic design, customizable tokens, comments support, easy debugging.
 
 
-For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/white_gold/tree/master/doc/draft/readme.md.rbs) template.
+For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/rebus/tree/master/doc/draft/readme.md.rbs) template.
 
 Installation
 ---
@@ -83,7 +83,7 @@ puts Rebus.compile_file "a0.rbs", toy
 ```
 
 Output(HTML):
-```
+```HTML
 <html>
 <head><title>Ruby Toys -- Rubysapien</title></head>
 <body>

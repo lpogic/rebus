@@ -3,7 +3,7 @@
 
 #{ gemspec.description }
 
-For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/white_gold/tree/master/doc/draft/readme.md.rbs) template.
+For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/rebus/tree/master/doc/draft/readme.md.rbs) template.
 
 Installation
 ---
@@ -34,7 +34,7 @@ Source code(Ruby):
 #{ code.call "sample/a0.rb" }
 
 Output(HTML):
-```
+```HTML
 <html>
   <head><title>Ruby Toys -- Rubysapien</title></head>
   <body>
