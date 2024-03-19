@@ -1,0 +1,30 @@
+Welcome to the _#{ gemspec.name }_ documentation home page!
+===
+
+Installation
+---
+```
+gem install #{ gemspec.name }
+```
+
+Usage
+---
+#{ sample.call "Render from string & code lines", "sample/a1.rb" }
+#{ sample.call "Interpolation & comments", "sample/a2.rb" }
+#{ sample.call "Render from IO", "sample/a3.rb" }
+#{ sample.call "Binding as template context", "sample/a4.rb" }
+#{ sample.call "Block argument - automatic context catching & granulated output", "sample/a5.rb" }
+#{ sample.call "Object as template context", "sample/a6.rb" }
+#{ sample.call "Keyword arguments as template context", "sample/a7.rb" }
+`b.html.rbs` content:
+```HTML
+ #{ File.read base_dir + "/sample/b.html.rbs" }
+```
+#{ sample.call "File content rendering", "sample/b1.rb" }
+#{ sample.call "Setting file home path", "sample/b2.rb" }
+#{ sample.call "Debugging - exception backtrace points to broken lines", "sample/b3.rb" }
+#{ sample.call "Setting template tokens", "sample/b4.rb" }
+
+Authors
+---
+#{ gemspec.authors.zip(Array(gemspec.email)).map{ "- #{_1} (#{_2})" }.join("\n") }

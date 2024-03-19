@@ -1,0 +1,6 @@
+/.vscode
+/test/*
+/progress.txt
+/todo.txt
+/sketch
+*.gem
