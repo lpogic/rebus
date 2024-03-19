@@ -1,7 +1,7 @@
-rebus - ruby stencil processor
+rebus - ruby stencil compiler
 ===
 
-Universal template processor based on ruby dynamic evaluation feature. 
+Universal template compiler based on ruby dynamic evaluation feature. 
 Minimalistic design, customizable tokens, comments support, easy debugging.
 
 

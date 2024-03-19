@@ -3,9 +3,9 @@ require_relative "./lib/rebus/version"
 Gem::Specification.new do |s|
   s.name        = "rebus"
   s.version     = Rebus::VERSION
-  s.summary     = "ruby stencil processor"
+  s.summary     = "ruby stencil compiler"
   s.description = <<~EOT
-    Universal template processor based on ruby dynamic evaluation feature. 
+    Universal template compiler based on ruby dynamic evaluation feature. 
     Minimalistic design, customizable tokens, comments support, easy debugging.
   EOT
   s.authors     = ["Łukasz Pomietło"]
