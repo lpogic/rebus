@@ -3,7 +3,7 @@ require_relative "./lib/rebus/version"
 Gem::Specification.new do |s|
   s.name        = "rebus"
   s.version     = Rebus::VERSION
-  s.summary     = "Ruby loving template processor"
+  s.summary     = "ruby stencil processor"
   s.description = <<~EOT
     Universal template processor based on ruby dynamic evaluation feature. 
     Minimalistic design, customizable tokens, comments support, easy debugging.

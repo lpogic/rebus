@@ -1,4 +1,4 @@
-rebus - Ruby loving template processor
+rebus - ruby stencil processor
 ===
 
 Universal template processor based on ruby dynamic evaluation feature. 
@@ -281,14 +281,6 @@ __END__
 </ul>
 ```
 
-`b.html.rbs` content:
-```HTML
-<ul>
-  |> items.each do |i|
-    <li>#{i}</li>
-  |> end
-</ul>
-```
 ### 8. File content rendering
 ```RUBY
 require 'rebus'
@@ -306,6 +298,14 @@ puts Rebus.compile_file "b.html.rbs", binding
 
 ```
 
+`b.html.rbs` content:
+```HTML
+<ul>
+  |> items.each do |i|
+    <li>#{i}</li>
+  |> end
+</ul>
+```
 ### 9. Setting file home path
 ```RUBY
 require 'rebus'
