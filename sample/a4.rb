@@ -14,7 +14,7 @@ puts Rebus.compile DATA, binding
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>

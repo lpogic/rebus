@@ -6,17 +6,17 @@
     <p>#@desc</p>
 
     <ul>
-      |> @features.each do |f|
+      #| @features.each do |f|
         <li><b>#{f}</b></li>
-      |> end
+      #| end
     </ul>
 
     <p>
-      |> if @cost < 10
+      #| if @cost < 10
         <b>Only #@cost!!!</b>
-      |> else
+      #| else
         Call for a price, today!
-      |> end
+      #| end
     </p>
 
   </body>

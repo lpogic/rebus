@@ -1,7 +1,7 @@
 require 'rebus'
 
 Rebus.code_prefix = "%"
-Rebus.comment_prefix = "//"
+Rebus.comment_prefix = "#"
 puts Rebus.compile DATA
 
 # Output:
@@ -16,8 +16,8 @@ __END__
 
 <ul>
   % (1..3).each do |i|
-    // this is comment line
+    # this is comment line
     <li>#{i}</li>
-    // <br>
+    # <br>
   % end
 </ul>

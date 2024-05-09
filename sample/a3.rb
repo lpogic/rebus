@@ -13,7 +13,7 @@ puts Rebus.compile DATA
 __END__
 
 <ul>
-  |> (1..3).each do |i|
+  #| (1..3).each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>

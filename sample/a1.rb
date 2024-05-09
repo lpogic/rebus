@@ -2,9 +2,9 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-      |> 3.times do
+      #| 3.times do
         <li>!</li>
-      |> end
+      #| end
   </ul>
 EOS
 

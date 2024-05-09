@@ -15,9 +15,9 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-      |> 3.times do
+      #| 3.times do
         <li>!</li>
-      |> end
+      #| end
   </ul>
 EOS
 
@@ -38,11 +38,11 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-# this is commented line - parser skip it
-    |> i = "Hello"
-#    |> (1..5).each do |i|
+// this is commented line - parser skip it
+    #| i = "Hello"
+//     > (1..5).each do |i|
       <li>#{i}</li>
-#    |> end
+//     > end
   </ul>
 EOS
 
@@ -72,9 +72,9 @@ puts Rebus.compile DATA
 __END__
 
 <ul>
-  |> (1..3).each do |i|
+  #| (1..3).each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -96,9 +96,9 @@ puts Rebus.compile DATA, binding
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -122,9 +122,9 @@ end
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -152,9 +152,9 @@ puts Rebus.compile DATA, foo
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -175,18 +175,18 @@ puts Rebus.compile DATA, items: [:alpha, :beta, :gamma]
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
 `b.html.rbs` content:
 ```HTML
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 ### 8. File content rendering
@@ -241,7 +241,7 @@ puts Rebus.compile_file "b.html.rbs"
 require 'rebus'
 
 Rebus.code_prefix = "%"
-Rebus.comment_prefix = "//"
+Rebus.comment_prefix = "#"
 puts Rebus.compile DATA
 
 # Output:
@@ -256,9 +256,9 @@ __END__
 
 <ul>
   % (1..3).each do |i|
-    // this is comment line
+    # this is comment line
     <li>#{i}</li>
-    // <br>
+    # <br>
   % end
 </ul>
 ```

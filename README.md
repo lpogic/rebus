@@ -5,7 +5,7 @@ Universal template compiler based on ruby dynamic evaluation feature.
 Minimalistic design, customizable tokens, comments support, easy debugging.
 
 
-For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/rebus/tree/master/doc/draft/readme.md.rbs) template.
+For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/rebus/blob/main/doc/draft/readme.md.rbs) template.
 
 Installation
 ---
@@ -37,17 +37,17 @@ Template(Rebus - HTML):
     <p>#@desc</p>
 
     <ul>
-      |> @features.each do |f|
+      #| @features.each do |f|
         <li><b>#{f}</b></li>
-      |> end
+      #| end
     </ul>
 
     <p>
-      |> if @cost < 10
+      #| if @cost < 10
         <b>Only #@cost!!!</b>
-      |> else
+      #| else
         Call for a price, today!
-      |> end
+      #| end
     </p>
 
   </body>
@@ -115,9 +115,9 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-      |> 3.times do
+      #| 3.times do
         <li>!</li>
-      |> end
+      #| end
   </ul>
 EOS
 
@@ -138,11 +138,11 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-# this is commented line - parser skip it
-    |> i = "Hello"
-#    |> (1..5).each do |i|
+// this is commented line - parser skip it
+    #| i = "Hello"
+//     > (1..5).each do |i|
       <li>#{i}</li>
-#    |> end
+//     > end
   </ul>
 EOS
 
@@ -172,9 +172,9 @@ puts Rebus.compile DATA
 __END__
 
 <ul>
-  |> (1..3).each do |i|
+  #| (1..3).each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -196,9 +196,9 @@ puts Rebus.compile DATA, binding
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -222,9 +222,9 @@ end
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -252,9 +252,9 @@ puts Rebus.compile DATA, foo
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -275,9 +275,9 @@ puts Rebus.compile DATA, items: [:alpha, :beta, :gamma]
 __END__
 
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 
@@ -301,9 +301,9 @@ puts Rebus.compile_file "b.html.rbs", binding
 `b.html.rbs` content:
 ```HTML
 <ul>
-  |> items.each do |i|
+  #| items.each do |i|
     <li>#{i}</li>
-  |> end
+  #| end
 </ul>
 ```
 ### 9. Setting file home path
@@ -341,7 +341,7 @@ puts Rebus.compile_file "b.html.rbs"
 require 'rebus'
 
 Rebus.code_prefix = "%"
-Rebus.comment_prefix = "//"
+Rebus.comment_prefix = "#"
 puts Rebus.compile DATA
 
 # Output:
@@ -356,9 +356,9 @@ __END__
 
 <ul>
   % (1..3).each do |i|
-    // this is comment line
+    # this is comment line
     <li>#{i}</li>
-    // <br>
+    # <br>
   % end
 </ul>
 ```

@@ -4,7 +4,7 @@ require_relative 'rebus/context'
 module Rebus
   class << self
     attr_accessor :code_prefix
-    attr_accessor :comment_prefix
+        attr_accessor :comment_prefix
     attr_accessor :home
 
     def compile_file filename, context = nil, **na, &block
@@ -45,6 +45,6 @@ module Rebus
     end
   end
   
-  self.code_prefix = "|>"
-  self.comment_prefix = "#[^{@$]"
+  self.code_prefix = "#\\|"
+  self.comment_prefix = "//"
 end

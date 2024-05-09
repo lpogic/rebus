@@ -7,20 +7,19 @@ module Rebus
     model :code_prefix, :comment_prefix, :context do
       @code_prefix ||= Rebus.code_prefix
       @comment_prefix ||= Rebus.comment_prefix
-      reset_lines
     end
 
-    def reset_lines
+    def reset
       @current_line = 1
       @string_lines = []
+      @mode = :code
     end
 
     def compile source
-      return compile source do;end if !block_given?
-
-      reset_lines
+      reset
       parsed = parse source
       error = nil
+      puts parsed
 
       begin
         if source.is_a? File
@@ -47,33 +46,49 @@ module Rebus
         raise "Unsupported source #{source.class}"
       end
 
-      escaped_code_prefix = Regexp.escape @code_prefix
-      line_regexp = /^\s*(#{@comment_prefix})?(#{escaped_code_prefix})?\s*(.+)\s*$/
-      source.each_line.map{ parse_line _1, line_regexp }.compact.join "\n"
-    end
-
-    def parse_line line, regexp
-      if line =~ regexp
-        if $1 # comment
-          @current_line += 1
-          return ""
-        else
-          if $2 # code
-            @current_line += 1
-            return $3
-          else # string
-            @string_lines << @current_line + 1
-            @current_line += 3
-            return "yield <<-\"#{@code_prefix}\".chop\n#{$3}\n#{@code_prefix}"
-          end
-        end
-      else # blank line
-        @current_line += 1
-        return "yield ''"
-      end
+      line_regexp = /^\s*(#{@comment_prefix})?(#{@code_prefix})?\s*(.*)\s*$/
+      result = source.each_line.map{ parse_line _1, line_regexp }.compact.join "\n"
+      result + "\n" + code("")
     end
 
     private
+
+    def parse_line line, regexp
+      line =~ regexp ? $1 ? comment : $2 ? code($3) : text($3) : blank
+    end
+
+    def comment
+      nil
+    end
+
+    def code line
+      out = ""
+      if @mode == :text
+        out << @code_prefix << "\n"
+        @current_line += 1
+      end
+      out << line
+      @current_line += 1
+      @mode = :code
+      out
+    end
+
+    def text line
+      out = ""
+      if @mode == :code
+        out << "yield <<-\"#{@code_prefix}\".chop\n"
+        @current_line += 1
+      end
+      out << line
+      @current_line += 1
+      @mode = :text
+      out
+    end
+
+    def blank
+      @current_line += 1
+      ""
+    end
 
     def prepare_error error
       lines = error.message.split("\n")
