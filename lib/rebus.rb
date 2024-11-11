@@ -3,9 +3,7 @@ require_relative 'rebus/context'
 
 module Rebus
   class << self
-    attr_accessor :code_prefix
-        attr_accessor :comment_prefix
-    attr_accessor :home
+    attr_accessor :code_prefix, :comment_prefix, :strip_lines, :home
 
     def compile_file filename, context = nil, **na, &block
       if !File.absolute_path? filename
@@ -45,6 +43,7 @@ module Rebus
     end
   end
   
-  self.code_prefix = "#\\|"
-  self.comment_prefix = "//"
+  self.code_prefix = "$ "
+  self.comment_prefix = "# "
+  self.strip_lines = false
 end

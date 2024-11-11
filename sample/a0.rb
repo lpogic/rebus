@@ -2,7 +2,7 @@ require 'rebus'
 require 'modeling' # to keep sample code concise
 
 class Product
-  model :@code, :@name, :@desc, :@cost do
+  model :code, :name, :desc, :cost do
     @features = [ ]
   end
 

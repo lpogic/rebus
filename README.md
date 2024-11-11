@@ -1,8 +1,8 @@
-rebus - ruby stencil compiler
+rebus - Ruby stencil compiler
 ===
 
-Universal template compiler based on ruby dynamic evaluation feature. 
-Minimalistic design, customizable tokens, comments support, easy debugging.
+Rebus template language compiler based on Ruby dynamic evaluation.
+Minimalistic and customizable.
 
 
 For example this document was rendered from [readme.md.rbs](https://github.com/lpogic/rebus/blob/main/doc/draft/readme.md.rbs) template.
@@ -18,11 +18,10 @@ Basics
 
 Rules are:
 - input is interpreted line by line
-- initial white spaces are ignored
 - there are 3 different line types recognized by the following prefixes:
-  - `#` - a comment line skipped during compilation
-  - `|>` - a code line evaluated during compilation
-  - any other prefix - a string line with possible interpolated code (see Ruby string interpolation rules)
+  - `# `  - a comment line skipped during compilation
+  - `$ `  - a code line evaluated during compilation
+  - any other - a string line with possible interpolated code (see Ruby string interpolation rules)
 
 #### Sample (stealed and translated from [ERB documentation](https://ruby-doc.org/stdlib-3.1.0/libdoc/erb/rdoc/ERB.html#class-ERB-label-Ruby+in+HTML)):
 
@@ -37,17 +36,17 @@ Template(Rebus - HTML):
     <p>#@desc</p>
 
     <ul>
-      #| @features.each do |f|
-        <li><b>#{f}</b></li>
-      #| end
+      $ @features.each do |f|
+      <li><b>#{f}</b></li>
+      $ end
     </ul>
 
     <p>
-      #| if @cost < 10
-        <b>Only #@cost!!!</b>
-      #| else
-        Call for a price, today!
-      #| end
+      $ if @cost < 10
+      <b>Only #@cost!!!</b>
+      $ else
+      Call for a price, today!
+      $ end
     </p>
 
   </body>
@@ -60,7 +59,7 @@ require 'rebus'
 require 'modeling' # to keep sample code concise
 
 class Product
-  model :@code, :@name, :@desc, :@cost do
+  model :code, :name, :desc, :cost do
     @features = [ ]
   end
 
@@ -85,39 +84,39 @@ puts Rebus.compile_file "a0.rbs", toy
 Output(HTML):
 ```HTML
 <html>
-<head><title>Ruby Toys -- Rubysapien</title></head>
-<body>
+  <head><title>Ruby Toys -- Rubysapien</title></head>
+  <body>
 
-<h1>Rubysapien (TZ-1002)</h1>
-<p>Geek's Best Friend!  Responds to Ruby commands...</p>
+    <h1>Rubysapien (TZ-1002)</h1>
+    <p>Geek's Best Friend!  Responds to Ruby commands...</p>
 
-<ul>
-<li><b>Listens for verbal commands in the Ruby language!</b></li>
-<li><b>Ignores Perl, Java, and all C variants.</b></li>
-<li><b>Karate-Chop Action!!!</b></li>
-<li><b>Matz signature on left leg.</b></li>
-<li><b>Gem studded eyes... Rubies, of course!</b></li>
-</ul>
+    <ul>
+        <li><b>Listens for verbal commands in the Ruby language!</b></li>
+        <li><b>Ignores Perl, Java, and all C variants.</b></li>
+        <li><b>Karate-Chop Action!!!</b></li>
+        <li><b>Matz signature on left leg.</b></li>
+        <li><b>Gem studded eyes... Rubies, of course!</b></li>
+    </ul>
 
-<p>
-Call for a price, today!
-</p>
+    <p>
+         Call for a price, today!
+    </p>
 
-</body>
+  </body>
 </html>
 ```
 
 Usage
 ---
-### 1. Render from string, |> code lines
+### 1. Render from string, $ code lines
 ```RUBY
 require 'rebus'
 
 template = <<~'EOS'
   <ul>
-      #| 3.times do
-        <li>!</li>
-      #| end
+    $ 3.times do
+    <li>!</li>
+    $ end
   </ul>
 EOS
 
@@ -126,9 +125,9 @@ puts Rebus.compile template
 # Output:
 #
 # <ul>
-# <li>!</li>
-# <li>!</li>
-# <li>!</li>
+#   <li>!</li>
+#   <li>!</li>
+#   <li>!</li>
 # </ul>
 ```
 
@@ -138,11 +137,11 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-// this is commented line - parser skip it
-    #| i = "Hello"
-//     > (1..5).each do |i|
-      <li>#{i}</li>
-//     > end
+  # this is a comment line - parser skips it
+    $ i = "Hello"
+    # $ (1..5).each do |i|
+    <li>#{i}</li>
+    # $ end
   </ul>
 EOS
 
@@ -151,7 +150,7 @@ puts Rebus.compile template
 # Output:
 #
 # <ul>
-# <li>Hello</li>
+#   <li>Hello</li>
 # </ul>
 ```
 
@@ -164,17 +163,17 @@ puts Rebus.compile DATA
 # Output:
 #
 # <ul>
-# <li>1</li>
-# <li>2</li>
-# <li>3</li>
+#   <li>1</li>
+#   <li>2</li>
+#   <li>3</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| (1..3).each do |i|
-    <li>#{i}</li>
-  #| end
+  $ (1..3).each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -188,17 +187,17 @@ puts Rebus.compile DATA, binding
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -214,17 +213,17 @@ end
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -244,17 +243,17 @@ puts Rebus.compile DATA, foo
 # Output:
 #
 # <ul>
-# <li>alpha</li>
-# <li>beta</li>
-# <li>gamma</li>
+#   <li>alpha</li>
+#   <li>beta</li>
+#   <li>gamma</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -267,17 +266,17 @@ puts Rebus.compile DATA, items: [:alpha, :beta, :gamma]
 # Output:
 #
 # <ul>
-# <li>alpha</li>
-# <li>beta</li>
-# <li>gamma</li>
+#   <li>alpha</li>
+#   <li>beta</li>
+#   <li>gamma</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -291,9 +290,9 @@ puts Rebus.compile_file "b.html.rbs", binding
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 ```
@@ -301,9 +300,9 @@ puts Rebus.compile_file "b.html.rbs", binding
 `b.html.rbs` content:
 ```HTML
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 ### 9. Setting file home path
@@ -317,9 +316,9 @@ puts Rebus.compile_file "b.html.rbs", items: [:a, :b, :c]
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 ```
@@ -336,12 +335,13 @@ puts Rebus.compile_file "b.html.rbs"
 
 ```
 
-### 11. Setting template tokens
+### 11. Setting custom code & comment tokens, line stripping
 ```RUBY
 require 'rebus'
 
-Rebus.code_prefix = "%"
-Rebus.comment_prefix = "#"
+Rebus.code_prefix = "~>"
+Rebus.comment_prefix = "//"
+Rebus.strip_lines = true
 puts Rebus.compile DATA
 
 # Output:
@@ -355,11 +355,11 @@ puts Rebus.compile DATA
 __END__
 
 <ul>
-  % (1..3).each do |i|
-    # this is comment line
+  ~> (1..3).each do |i|
+    // this is a comment line
     <li>#{i}</li>
-    # <br>
-  % end
+    // <br>
+  ~> end
 </ul>
 ```
 

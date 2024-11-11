@@ -16,13 +16,12 @@ Basics
 
 Rules are:
 - input is interpreted line by line
-- initial white spaces are ignored
 - there are 3 different line types recognized by the following prefixes:
-\  - `#` - a comment line skipped during compilation
-\  - `|>` - a code line evaluated during compilation
-\  - any other prefix - a string line with possible interpolated code (see Ruby string interpolation rules)
+  - `# `  - a comment line skipped during compilation
+  - `$ `  - a code line evaluated during compilation
+  - any other - a string line with possible interpolated code (see Ruby string interpolation rules)
 
-\#### Sample (stealed and translated from [ERB documentation](https://ruby-doc.org/stdlib-3.1.0/libdoc/erb/rdoc/ERB.html#class-ERB-label-Ruby+in+HTML)):
+#### Sample (stealed and translated from [ERB documentation](https://ruby-doc.org/stdlib-3.1.0/libdoc/erb/rdoc/ERB.html#class-ERB-label-Ruby+in+HTML)):
 
 
 Template(Rebus - HTML):
@@ -60,7 +59,7 @@ Output(HTML):
 
 Usage
 ---
-#{ sample.call "Render from string, |> code lines", "sample/a1.rb" }
+#{ sample.call "Render from string, $ code lines", "sample/a1.rb" }
 #{ sample.call "\#{Interpolation}, # comments", "sample/a2.rb" }
 #{ sample.call "Render from IO", "sample/a3.rb" }
 #{ sample.call "Binding as template context", "sample/a4.rb" }
@@ -70,11 +69,11 @@ Usage
 #{ sample.call "File content rendering", "sample/b1.rb" }
 `b.html.rbs` content:
 ```HTML
- #{ File.read base_dir + "/sample/b.html.rbs" }
+#{ File.read base_dir + "/sample/b.html.rbs" }
 ```
 #{ sample.call "Setting file home path", "sample/b2.rb" }
 #{ sample.call "Debugging - exception backtrace points to broken lines", "sample/b3.rb" }
-#{ sample.call "Setting template tokens", "sample/b4.rb" }
+#{ sample.call "Setting custom code & comment tokens, line stripping", "sample/b4.rb" }
 
 Authors
 ---

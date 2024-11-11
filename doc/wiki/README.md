@@ -15,9 +15,9 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-      #| 3.times do
-        <li>!</li>
-      #| end
+    $ 3.times do
+    <li>!</li>
+    $ end
   </ul>
 EOS
 
@@ -26,9 +26,9 @@ puts Rebus.compile template
 # Output:
 #
 # <ul>
-# <li>!</li>
-# <li>!</li>
-# <li>!</li>
+#   <li>!</li>
+#   <li>!</li>
+#   <li>!</li>
 # </ul>
 ```
 
@@ -38,11 +38,11 @@ require 'rebus'
 
 template = <<~'EOS'
   <ul>
-// this is commented line - parser skip it
-    #| i = "Hello"
-//     > (1..5).each do |i|
-      <li>#{i}</li>
-//     > end
+  # this is a comment line - parser skips it
+    $ i = "Hello"
+    # $ (1..5).each do |i|
+    <li>#{i}</li>
+    # $ end
   </ul>
 EOS
 
@@ -51,7 +51,7 @@ puts Rebus.compile template
 # Output:
 #
 # <ul>
-# <li>Hello</li>
+#   <li>Hello</li>
 # </ul>
 ```
 
@@ -64,17 +64,17 @@ puts Rebus.compile DATA
 # Output:
 #
 # <ul>
-# <li>1</li>
-# <li>2</li>
-# <li>3</li>
+#   <li>1</li>
+#   <li>2</li>
+#   <li>3</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| (1..3).each do |i|
-    <li>#{i}</li>
-  #| end
+  $ (1..3).each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -88,17 +88,17 @@ puts Rebus.compile DATA, binding
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -114,17 +114,17 @@ end
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -144,17 +144,17 @@ puts Rebus.compile DATA, foo
 # Output:
 #
 # <ul>
-# <li>alpha</li>
-# <li>beta</li>
-# <li>gamma</li>
+#   <li>alpha</li>
+#   <li>beta</li>
+#   <li>gamma</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
@@ -167,26 +167,26 @@ puts Rebus.compile DATA, items: [:alpha, :beta, :gamma]
 # Output:
 #
 # <ul>
-# <li>alpha</li>
-# <li>beta</li>
-# <li>gamma</li>
+#   <li>alpha</li>
+#   <li>beta</li>
+#   <li>gamma</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 
 `b.html.rbs` content:
 ```HTML
-<ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+ <ul>
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
 ```
 ### 8. File content rendering
@@ -199,9 +199,9 @@ puts Rebus.compile_file "b.html.rbs", binding
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 ```
@@ -217,9 +217,9 @@ puts Rebus.compile_file "b.html.rbs", items: [:a, :b, :c]
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 ```
@@ -240,8 +240,9 @@ puts Rebus.compile_file "b.html.rbs"
 ```RUBY
 require 'rebus'
 
-Rebus.code_prefix = "%"
-Rebus.comment_prefix = "#"
+Rebus.code_prefix = "~>"
+Rebus.comment_prefix = "//"
+Rebus.strip_lines = true
 puts Rebus.compile DATA
 
 # Output:
@@ -255,11 +256,11 @@ puts Rebus.compile DATA
 __END__
 
 <ul>
-  % (1..3).each do |i|
-    # this is comment line
+  ~> (1..3).each do |i|
+    // this is a comment line
     <li>#{i}</li>
-    # <br>
-  % end
+    // <br>
+  ~> end
 </ul>
 ```
 

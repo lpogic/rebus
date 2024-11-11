@@ -8,15 +8,15 @@ end
 # Output:
 #
 # <ul>
-# <li>a</li>
-# <li>b</li>
-# <li>c</li>
+#   <li>a</li>
+#   <li>b</li>
+#   <li>c</li>
 # </ul>
 
 __END__
 
 <ul>
-  #| items.each do |i|
-    <li>#{i}</li>
-  #| end
+  $ items.each do |i|
+  <li>#{i}</li>
+  $ end
 </ul>
