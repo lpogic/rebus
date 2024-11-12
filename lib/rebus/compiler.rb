@@ -11,8 +11,8 @@ module Rebus
     end
         
     def reset
-      @mode = :code
-      @text_line_begin = "yield <<-\"#{@code_prefix}\".chop\n"
+      @code_mode = true
+      @text_line_begin = "yield <<-\"#{@code_prefix}\".chomp!.chomp\n"
       @text_line_end = "#{code_prefix}\n"
     end
 
@@ -22,7 +22,7 @@ module Rebus
       reset
       parsed = parse source
       error = nil
-
+      
       begin
         if source.is_a? File
           context.instance_eval parsed, source.path
@@ -47,8 +47,12 @@ module Rebus
       else 
         raise "Unsupported source #{source.class}"
       end
-
-      result = source.each_line.map{ parse_line _1 }.compact.join "\n"
+      result = source
+        .each_line
+        .lazy
+        .map{ parse_line _1 }
+        .compact
+        .reduce{|acc, line| "#{acc}\n#{line}" }
       result + "\n" + code("")
     end
 
@@ -56,52 +60,38 @@ module Rebus
 
     def parse_line line
       stripped = line.strip
-      if stripped == ""
-        blank
-      elsif stripped.start_with? @code_prefix
-        code stripped[@code_prefix.length..]
-      elsif stripped.start_with? @comment_prefix
-        code ""
+      if stripped.start_with?(@code_prefix) || stripped == @code_prefix.strip
+        code stripped[@code_prefix.length..] || ""
+      elsif stripped.start_with?(@comment_prefix) || stripped == @comment_prefix.strip
+        nil
       else
         text @strip_lines ? stripped : line.chomp
       end
     end
 
     def text line
-      out = ""
-      if @mode == :code
-        out << @text_line_begin
-      end
-      out << line
-      @mode = :text
-      out
+      return line unless @code_mode
+      @code_mode = false
+      "#{@text_line_begin}#{line}"
     end
 
     def code line
-      out = ""
-      if @mode == :text
-        out << @text_line_end
-      end
-      out << line
-      @mode = :code
-      out
-    end
-
-    def blank
-      ""
+      return line if @code_mode
+      @code_mode = true
+      "\n#{@text_line_end}#{line}"
     end
 
     def prepare_error error, parsed
-      lines = error.message.split("\n")
+      first_line, lines = *error.message.split("\n", 2)
       path_regexp = /^(.*:)(\d+):(.*)/
-      if lines[0] =~ path_regexp
+      if first_line =~ path_regexp
         lineno = reduce_error_lineno $2.to_i, parsed
         backtrace = [$1 + lineno.to_s, *error.backtrace]
-        message = "#{$3}\n#{lines[1..]&.join "\n"}"
+        message = "#{$3}\n#{lines}"
       elsif error.backtrace[0] =~ path_regexp
         lineno = reduce_error_lineno $2.to_i, parsed
         backtrace = [$1 + lineno.to_s, *error.backtrace[1..]]
-        message = "#{lines&.join "\n"}"
+        message = error.message
       else
         backtrace = error.backtrace
         message = error.message
@@ -115,7 +105,11 @@ module Rebus
       lineno = 0
       parsed.each_line.each_with_index do |line, i|
         break if i >= error_lineno
-        lineno += 1 if line != @text_line_begin && line != @text_line_end
+        if line == @text_line_end
+          lineno -= 1
+        elsif line != @text_line_begin
+          lineno += 1
+        end
       end
       lineno
     end
