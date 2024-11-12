@@ -24,6 +24,10 @@ Usage
 #{ sample.call "Setting file home path", "sample/b2.rb" }
 #{ sample.call "Debugging - exception backtrace points to broken lines", "sample/b3.rb" }
 #{ sample.call "Setting template tokens", "sample/b4.rb" }
+Tricks
+---
+#{ sample.call "Preserve leading/trailing spaces in strip mode, new line with \\n", "sample/c1.rb" }
+#{ sample.call "Interpolated code block", "sample/c2.rb" }
 
 Authors
 ---

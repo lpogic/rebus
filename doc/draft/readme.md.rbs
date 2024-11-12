@@ -59,21 +59,7 @@ Output(HTML):
 
 Usage
 ---
-#{ sample.call "Render from string, $ code lines", "sample/a1.rb" }
-#{ sample.call "\#{Interpolation}, # comments", "sample/a2.rb" }
-#{ sample.call "Render from IO", "sample/a3.rb" }
-#{ sample.call "Binding as template context", "sample/a4.rb" }
-#{ sample.call "Block argument - automatic context catching & granulated output", "sample/a5.rb" }
-#{ sample.call "Object as template context", "sample/a6.rb" }
-#{ sample.call "Keyword arguments as template context", "sample/a7.rb" }
-#{ sample.call "File content rendering", "sample/b1.rb" }
-`b.html.rbs` content:
-```HTML
-#{ File.read base_dir + "/sample/b.html.rbs" }
-```
-#{ sample.call "Setting file home path", "sample/b2.rb" }
-#{ sample.call "Debugging - exception backtrace points to broken lines", "sample/b3.rb" }
-#{ sample.call "Setting custom code & comment tokens, line stripping", "sample/b4.rb" }
+[Wiki](https://github.com/lpogic/rebus/blob/main/doc/wiki/README.md)
 
 Authors
 ---

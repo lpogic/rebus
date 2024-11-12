@@ -264,6 +264,49 @@ __END__
 </ul>
 ```
 
+Tricks
+---
+### 12. Preserve leading/trailing spaces in strip mode, new line with \n
+```RUBY
+require 'rebus'
+
+Rebus.strip_lines = true
+puts Rebus.compile DATA
+
+# Output:
+#
+# TEST1
+#    TEST2
+# TEST3
+
+__END__
+
+TEST1
+\   TEST2\nTEST3
+```
+
+### 13. Interpolated code block
+```RUBY
+require 'rebus'
+
+puts Rebus.compile DATA
+
+# Output:
+#
+# Hello World!
+
+__END__
+
+#{
+  def foo
+    "World!"
+  end
+  nil
+}\
+\
+Hello #{ foo }
+```
+
 
 Authors
 ---
